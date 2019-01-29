@@ -3,16 +3,16 @@ defmodule ChecksumCalculator do
   Documentation for ChecksumCalculator.
   """
 
-  @doc """
-  Hello world.
+  alias ChecksumCalculator.Storage
 
-  ## Examples
+  @spec add(integer) :: :ok
+  def add(val), do: Storage.push(val)
 
-      iex> ChecksumCalculator.hello()
-      :world
+  @spec append(integer, integer) :: :ok | {:error, atom}
+  def append(position, val), do: Storage.append(position, val)
 
-  """
-  def hello do
-    :world
+  @spec get_checksum() :: {:ok, integer} | {:error, atom}
+  def get_checksum do
+    true
   end
 end
