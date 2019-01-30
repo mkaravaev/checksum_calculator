@@ -26,7 +26,6 @@ defmodule ChecksumCalculatorTest do
       assert Storage.get_storage_map[1] == [first_value, 000]
     end
 
-    @tag :skip
     test "should return error if element not exist" do
       assert ChecksumCalculator.append(100, 999) == {:error, :not_exisiting_position}
     end

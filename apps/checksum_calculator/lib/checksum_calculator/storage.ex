@@ -3,8 +3,9 @@ defmodule ChecksumCalculator.Storage do
 
   @counter_init_value 0
 
-  def start_link(_) do
-    Agent.start_link(fn -> {Map.new, @counter_init_value} end, name: __MODULE__)
+  def start_link(opts) do
+    {init_value, opts} = Keyword.pop(opts, :init_value, @counter_init_value)
+    Agent.start_link(fn -> {Map.new, init_value} end, opts)
   end
 
   def get_current_state do
@@ -26,9 +27,13 @@ defmodule ChecksumCalculator.Storage do
   end
 
   def append(position, val) do
-    Agent.update(__MODULE__, fn({map, counter}) ->
-      {Map.update!(map, position, &([&1, val])), counter}
-    end)
+    case get_counter() >= position do
+      true ->
+        Agent.update(__MODULE__, fn({map, counter}) ->
+          {Map.update!(map, position, &([&1, val])), counter}
+        end)
+      false -> {:error, :not_exisiting_position}
+    end
   end
 
   def delete_all do
