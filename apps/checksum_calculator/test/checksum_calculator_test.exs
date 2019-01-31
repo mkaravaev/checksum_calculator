@@ -1,12 +1,6 @@
 defmodule ChecksumCalculatorTest do
-  use ExUnit.Case
+  use ChecksumCalculator.StorageCase
   alias ChecksumCalculator.Storage
-
-  setup do
-    on_exit fn ->
-      Storage.delete_all
-    end
-  end
 
   describe "&add/1" do
     test "should push new number to storage" do
@@ -37,13 +31,5 @@ defmodule ChecksumCalculatorTest do
     test "should generate checksum" do
       assert ChecksumCalculator.get_checksum == true
     end
-  end
-
-  defp generate_storage(context) do
-    for i <- [1,2,333,444,55453,3] do
-      Storage.push(i)
-    end
-
-    :ok
   end
 end
