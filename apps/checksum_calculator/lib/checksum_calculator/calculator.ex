@@ -22,8 +22,8 @@ defmodule ChecksumCalculator.Calculator do
   defp reducer(elem, %{state: :even, even_sum: even_sum} = acc) do
     %{acc | state: :odd, even_sum: even_sum + elem}
   end
-  defp reducer(elem, %{state: :odd, odd_sum: even_sum} = acc) do
-    %{acc | state: :even, odd_sum: even_sum + elem}
+  defp reducer(elem, %{state: :odd, odd_sum: odd_sum} = acc) do
+    %{acc | state: :even, odd_sum: odd_sum + elem}
   end
 
   defp multiply_odd(%Calculator{odd_sum: odd_sum}=calc, multiplier\\@odd_multiplier) do

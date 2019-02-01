@@ -13,7 +13,7 @@ defmodule ChecksumCalculator.StorageCase do
 
       def generate_storage(context) do
         for i <- [1,2,333,444,55453,3] do
-          ChecksumCalculator.Storage.push(i)
+          ChecksumCalculator.add(i)
         end
 
         :ok

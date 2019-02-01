@@ -6,7 +6,7 @@ defmodule ChecksumCalculatorTest do
     test "should push new number to storage" do
       ChecksumCalculator.add(3333)
       ChecksumCalculator.add(44444)
-      assert Storage.get_storage_map == %{1 => 3333, 2 => 44444}
+      assert Storage.get_storage_map == %{1 => [3,3,3,3], 2 => [4,4,4,4,4]}
     end
   end
 
@@ -15,9 +15,9 @@ defmodule ChecksumCalculatorTest do
 
     test "should append digits to existent digit" do
       first_value = Storage.get_storage_map[1]
-      ChecksumCalculator.append(1, 000)
+      ChecksumCalculator.append(1, 1000)
 
-      assert Storage.get_storage_map[1] == [first_value, 000]
+      assert Storage.get_storage_map[1] == [first_value, 1, 0, 0, 0]
     end
 
     test "should return error if element not exist" do
@@ -25,11 +25,15 @@ defmodule ChecksumCalculatorTest do
     end
   end
 
-  describe "&get_checksum/0" do
+  describe "&count_checksum/0" do
     setup [:generate_storage]
 
     test "should generate checksum" do
-      assert ChecksumCalculator.get_checksum == true
+      assert ChecksumCalculator.count_checksum == 5
+    end
+
+    test "should return timout error when exceed execution limit" do
+      assert ChecksumCalculator.count_checksum(0) == {:error, :timeout}
     end
   end
 end
