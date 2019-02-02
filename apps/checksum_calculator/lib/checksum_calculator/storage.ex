@@ -30,7 +30,7 @@ defmodule ChecksumCalculator.Storage do
     case get_counter() >= position do
       true ->
         Agent.update(__MODULE__, fn({map, counter}) ->
-          {Map.update!(map, position, &([&1] ++ val)), counter}
+          {Map.update!(map, position, &List.wrap(&1) ++ val), counter}
         end)
       false -> {:error, :not_exisiting_position}
     end

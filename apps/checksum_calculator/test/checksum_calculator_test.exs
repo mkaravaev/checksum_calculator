@@ -14,10 +14,13 @@ defmodule ChecksumCalculatorTest do
     setup [:generate_storage]
 
     test "should append digits to existent digit" do
-      first_value = Storage.get_storage_map[1]
-      ChecksumCalculator.append(1000, position: 1)
+      first_val = Storage.get_storage_map[1]
 
-      assert Storage.get_storage_map[1] == [first_value, 1, 0, 0, 0]
+      ChecksumCalculator.append(1999, position: 1)
+      assert Storage.get_storage_map[1] == [first_val, 1,9,9,9]
+
+      ChecksumCalculator.append(888, position: 1)
+      assert Storage.get_storage_map[1] == [first_val, 1,9,9,9,8,8,8]
     end
 
     test "should return error if element not exist" do
