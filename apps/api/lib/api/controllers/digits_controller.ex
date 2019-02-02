@@ -3,21 +3,28 @@ defmodule Api.DigitsController do
 
   action_fallback Api.FallbackController
 
-  def create(conn, %{"value" => val}) do
-    with :ok <- ChecksumCalculator.add(val),
-    do: render(conn, :ok)
+  def index(conn, %{"with_positions" => "true"}) do
+    with state <- ChecksumCalculator.get_state(with_positions: true),
+    do: json(conn, state)
+  end
+  def index(conn, params) do
+    with  state <- ChecksumCalculator.get_state,
+    do: json(conn, state)
   end
 
-  def update(conn, %{"value" => val, "digit" => position} = params) do
-    IO.inspect params
+  def create(conn, %{"value" => val}) do
+    with :ok <- ChecksumCalculator.add(val),
+    do: json(conn, :ok)
+  end
 
+  def update(conn, %{"id" => position, "value" => val}) do
     with ChecksumCalculator.append(val, position: position),
-    do: render(conn, :ok)
+    do: json(conn, :ok)
   end
 
   def delete(conn, _params) do
-    with :ok <- ChecksumCalculator.delet_state,
-    do: render(conn, :ok)
+    with :ok <- ChecksumCalculator.clear_state,
+    do: json(conn, :ok)
   end
 
 end
