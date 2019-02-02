@@ -6,6 +6,8 @@ defmodule ChecksumCalculator do
   alias ChecksumCalculator.{Storage, DigitsParser, Calculator}
   alias ChecksumCalculator.Presenters.StoragePresenter
 
+  @type options :: {:position, integer}
+
   @task_compute_time 15
 
   @spec add(integer) :: :ok
@@ -16,9 +18,8 @@ defmodule ChecksumCalculator do
     |> Storage.push
   end
 
-
-  @spec append(integer, integer) :: :ok | {:error, atom}
-  def append(position, val) do
+  @spec append(integer, [options]) :: :ok | {:error, atom}
+  def append(val, position: position) do
     with list <- DigitsParser.int_to_digits_list(val),
     do: Storage.append(position, list)
   end
@@ -33,9 +34,20 @@ defmodule ChecksumCalculator do
     end
   end
 
-  def _count_checksum do
+  @spec clear_state() :: :ok | {:error, atom}
+  defdelegate clear_state, to: Storage, as: :delete_all
+
+  @spec get_state(options) :: tuple | list
+  def get_state, do: get_storage_as_list()
+  def get_state(with_positions: true), do: Storage.get_storage_map
+
+  defp _count_checksum do
+    get_storage_as_list() |> Calculator.perform()
+  end
+
+  defp get_storage_as_list do
     Storage.get_storage_map
     |> StoragePresenter.to_flat_list
-    |> Calculator.perform()
   end
+
 end

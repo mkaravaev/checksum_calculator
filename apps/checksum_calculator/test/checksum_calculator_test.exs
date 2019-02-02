@@ -15,13 +15,13 @@ defmodule ChecksumCalculatorTest do
 
     test "should append digits to existent digit" do
       first_value = Storage.get_storage_map[1]
-      ChecksumCalculator.append(1, 1000)
+      ChecksumCalculator.append(1000, position: 1)
 
       assert Storage.get_storage_map[1] == [first_value, 1, 0, 0, 0]
     end
 
     test "should return error if element not exist" do
-      assert ChecksumCalculator.append(100, 999) == {:error, :not_exisiting_position}
+      assert ChecksumCalculator.append(999, position: 100) == {:error, :not_exisiting_position}
     end
   end
 
@@ -34,6 +34,17 @@ defmodule ChecksumCalculatorTest do
 
     test "should return timout error when exceed execution limit" do
       assert ChecksumCalculator.count_checksum(0) == {:error, :timeout}
+    end
+  end
+
+  describe "&clear_state/0" do
+    setup [:generate_storage]
+
+    test "should reset storage state" do
+      refute ChecksumCalculator.get_state == []
+      assert ChecksumCalculator.clear_state == :ok
+      assert ChecksumCalculator.get_state == []
+      assert ChecksumCalculator.get_state(with_positions: true) == %{}
     end
   end
 end
