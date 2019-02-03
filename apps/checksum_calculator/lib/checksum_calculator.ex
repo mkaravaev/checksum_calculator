@@ -18,10 +18,11 @@ defmodule ChecksumCalculator do
     |> Storage.push
   end
 
-  @spec append(integer, [options]) :: :ok | {:error, atom}
-  def append(val, position: position) do
-    with list <- DigitsParser.int_to_digits_list(val),
-    do: Storage.append(position, list)
+  @spec append(integer | String.t, [options]) :: :ok | {:error, atom}
+  def append(val, position: position) when is_integer(position), do: _append(val, position)
+  def append(val, position: position) when is_binary(position) do
+    position = String.to_integer(position)
+    _append(val, position)
   end
 
   @spec count_checksum() :: {:ok, integer} | {:error, atom}
@@ -40,6 +41,11 @@ defmodule ChecksumCalculator do
   @spec get_state(options) :: tuple | list
   def get_state, do: get_storage_as_list()
   def get_state(with_positions: true), do: Storage.get_storage_map
+
+  defp _append(val, position) do
+    with list <- DigitsParser.int_to_digits_list(val),
+    do: Storage.append(position, list)
+  end
 
   defp _count_checksum do
     get_storage_as_list() |> Calculator.perform()
