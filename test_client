@@ -13,6 +13,8 @@ class Request
     req = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
     req.body = { value: val.to_i }.to_json
     http.request(req)
+  rescue => e
+    puts e
   end
 
   def self.clear
