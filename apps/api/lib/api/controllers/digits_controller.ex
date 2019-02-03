@@ -8,7 +8,7 @@ defmodule Api.DigitsController do
     do: json(conn, state)
   end
   def index(conn, params) do
-    with  state <- ChecksumCalculator.get_state,
+    with state <- ChecksumCalculator.get_state,
     do: json(conn, state)
   end
 
@@ -18,7 +18,7 @@ defmodule Api.DigitsController do
   end
 
   def update(conn, %{"id" => position, "value" => val}) do
-    with ChecksumCalculator.append(val, position: position),
+    with :ok <- ChecksumCalculator.append(val, position: position),
     do: json(conn, :ok)
   end
 
