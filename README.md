@@ -3,7 +3,7 @@
 ## Run test client
 
 1. mix phx.server
-2. ruby test_client <filename> - optional
+2. ruby test_client
 
 ## Use ChecksumCalculator API
 
