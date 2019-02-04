@@ -38,6 +38,14 @@ defmodule Api.DigitsControllerTest do
     end
   end
 
+  test "PATCH/PUT /digits error response" do
+    state_before = ChecksumCalculator.get_state
+    conn = patch(conn, digits_path(conn, :update, 299), value: 2223)
+
+    assert json_response(conn, 422) ==  %{"error" => "not_exisiting_position"}
+    assert ChecksumCalculator.get_state == state_before
+  end
+
   test "DELETE /digits", %{conn: conn} do
     conn = delete(conn, digits_path(conn, :delete))
     assert json_response(conn, 200) == "ok"

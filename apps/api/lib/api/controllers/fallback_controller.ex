@@ -4,8 +4,7 @@ defmodule Api.FallbackController do
   def call(conn, {:error, error}) do
     conn
       |> put_status(422)
-      # |> put_view(ErrorView)
-      |> render("error.json", errors: error)
+      |> json(%{error: error})
       |> halt()
   end
 
